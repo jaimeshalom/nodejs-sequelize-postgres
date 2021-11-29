@@ -11,7 +11,7 @@ const {
 
 const app = express();
 const port = process.env.PORT || 3000;
-
+console.log(process.env.DATABASE_URL);
 app.use(express.json());
 
 const whitelist = ['http://localhost:8080', 'https://myapp.co'];
