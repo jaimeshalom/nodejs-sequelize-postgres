@@ -13,8 +13,10 @@ const options = {
 };
 
 if (config.idProd) {
-  options.ssl = {
-    rejectUnauthorized: false,
+  options.dialectOptions = {
+    ssl: {
+      rejectUnauthorized: false,
+    },
   };
 }
 
