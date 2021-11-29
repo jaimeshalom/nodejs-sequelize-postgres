@@ -3,14 +3,22 @@ const { Sequelize } = require('sequelize');
 const { config } = require('../config/config');
 const setupModels = require('../db/models');
 
-const USER = encodeURIComponent(config.dbUser);
-const PASSWORD = encodeURIComponent(config.dbPassword);
-const URI = `${config.dbDbms}://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
+// const USER = encodeURIComponent(config.dbUser);
+// const PASSWORD = encodeURIComponent(config.dbPassword);
+// const URI = `${config.dbDbms}://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${config.dbName}`;
 
-const sequelize = new Sequelize(URI, {
+const options = {
   dialect: config.dbDbms,
-  logging: true,
-});
+  logging: config.idProd ? false : true,
+};
+
+if (config.idProd) {
+  options.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
+const sequelize = new Sequelize(config.dbUrl, options);
 
 setupModels(sequelize);
 
