@@ -12,8 +12,10 @@ module.exports = {
   production: {
     url: config.dbUrl,
     dialect: config.dbDbms,
-    ssl: {
-      rejectUnauthorized: false,
+    dialectOptions: {
+      ssl: {
+        rejectUnauthorized: false,
+      },
     },
   },
 };
