@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+const passport = require('passport');
 const routerApi = require('./routes');
+
+const { checkApiKey } = require('./middlewares/auth.handler');
 
 const {
   logErrors,
@@ -11,7 +14,8 @@ const {
 
 const app = express();
 const port = process.env.PORT || 3000;
-console.log(process.env.DATABASE_URL);
+app.use(passport.initialize());
+
 app.use(express.json());
 
 const whitelist = ['http://localhost:8080', 'https://myapp.co'];
@@ -26,11 +30,13 @@ const options = {
 };
 app.use(cors(options));
 
+require('./utils/auth');
+
 app.get('/', (req, res) => {
   res.send('Hola mi server en express');
 });
 
-app.get('/nueva-ruta', (req, res) => {
+app.get('/nueva-ruta', checkApiKey, (req, res) => {
   res.send('Hola, soy una nueva ruta');
 });
 
@@ -42,5 +48,5 @@ app.use(boomErrorHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log('Mi port' + port + ' http://localhost:' + port);
+  console.log('My port ' + port + ' http://localhost:' + port);
 });
